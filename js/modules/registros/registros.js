@@ -6,7 +6,9 @@ export const renderRegistros = () => {
   const empleados = DB.empleados.all();
   const config = DB.config.get();
   
-  const idForzado = window.empLogueadoId || '';
+  // Seguridad: leer la sesión de sessionStorage
+  const sessionTrabajador = sessionStorage.getItem('rlpt_active_user');
+  const idForzado = window.empLogueadoId || sessionTrabajador || '';
   const esAdmin = !idForzado;
 
   const hoy = new Date();

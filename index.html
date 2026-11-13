@@ -31,6 +31,7 @@
         <button class="nav-btn accent" id="btn-admin-login">🔑 Acceso Admin</button>
         <button class="nav-btn danger" id="btn-logout" style="display:none;">Salir Admin</button>
       </div>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
     </header>
 
     <main id="app">
@@ -87,5 +88,42 @@
   <div id="toast" class="toast"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script type="module" src="js/app.js"></script>
+
+<!-- MOBILE START -->
+<div class="mobile-overlay" id="mobile-overlay" style="display:none;"></div>
+<aside class="mobile-side-menu" id="mobile-side-menu" style="display:none;">
+  <div class="mobile-side-menu-header">
+    <h3>Menú</h3>
+    <button class="mobile-side-menu-close" id="mobile-side-menu-close">×</button>
+  </div>
+  <button class="nav-btn" data-view="panel" id="btn-mobile-panel">🏠 Panel</button>
+  <button class="nav-btn" data-view="calendario" id="btn-mobile-calendario">📅 Calendario</button>
+  <button class="nav-btn" data-view="registros" id="btn-mobile-registros">📋 Registros</button>
+  <button class="nav-btn admin-only" data-view="empleados" id="btn-mobile-empleados">👥 Empleados</button>
+  <button class="nav-btn admin-only" data-view="turnos" id="btn-mobile-turnos">🔄 Turnos</button>
+  <button class="nav-btn admin-only" data-view="configuracion" id="btn-mobile-configuracion">⚙️ Configuración</button>
+  
+  <div class="mobile-side-menu-footer">
+    <button class="nav-btn accent" id="btn-mobile-admin-login" style="background: var(--mob-accent); color: #1a1a1a;">🔑 Acceso Admin</button>
+    <button class="nav-btn danger" id="btn-mobile-logout" style="display: none; background: #dc2626;">Salir Admin</button>
+  </div>
+</aside>
+
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav" style="display:none;">
+  <button class="mobile-bottom-nav-btn active" data-view="panel" id="bn-panel">
+    <span class="icon">🏠</span>
+    <span>Panel</span>
+  </button>
+  <button class="mobile-bottom-nav-btn" data-view="calendario" id="bn-calendario">
+    <span class="icon">📅</span>
+    <span>Calendario</span>
+  </button>
+  <button class="mobile-bottom-nav-btn" data-view="registros" id="bn-registros">
+    <span class="icon">📋</span>
+    <span>Registros</span>
+  </button>
+</nav>
+<!-- MOBILE END -->
+
 </body>
 </html>

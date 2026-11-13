@@ -203,3 +203,162 @@ document.querySelectorAll('.nav-btn').forEach(b => {
 // 7. Arrancar la aplicación en modo público
 actualizarVistaAdmin();
 switchView('dashboard');
+
+
+// --- LÓGICA MÓVIL (menú lateral + barra inferior) ---
+document.addEventListener('DOMContentLoaded', () => {
+  const esMovil = () => window.innerWidth <= 768;
+  
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-side-menu');
+  const overlay = document.getElementById('mobile-overlay');
+  const closeBtn = document.getElementById('mobile-side-menu-close');
+  const bottomNav = document.getElementById('mobile-bottom-nav');
+  
+  // Mostrar/ocultar según el tamaño
+  const aplicarVisibilidad = () => {
+    if (esMovil()) {
+      if (menuBtn) menuBtn.style.display = 'flex';
+      if (bottomNav) bottomNav.style.display = 'flex';
+    } else {
+      if (menuBtn) menuBtn.style.display = 'none';
+      if (bottomNav) bottomNav.style.display = 'none';
+      if (menu) menu.classList.remove('open');
+      if (overlay) overlay.classList.remove('open');
+    }
+  };
+  
+  const abrirMenu = () => {
+    if (menu) { menu.style.display = 'flex'; setTimeout(() => menu.classList.add('open'), 10); }
+    if (overlay) { overlay.style.display = 'block'; setTimeout(() => overlay.classList.add('open'), 10); }
+  };
+  const cerrarMenu = () => {
+    if (menu) menu.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+    setTimeout(() => {
+      if (menu) menu.style.display = 'none';
+      if (overlay) overlay.style.display = 'none';
+    }, 300);
+  };
+  
+  if (menuBtn) menuBtn.addEventListener('click', abrirMenu);
+  if (closeBtn) closeBtn.addEventListener('click', cerrarMenu);
+  if (overlay) overlay.addEventListener('click', cerrarMenu);
+  
+  // Sincronizar con las pestañas originales
+  const sincronizar = (view) => {
+    // Marcar activo en bottom nav
+    document.querySelectorAll('.mobile-bottom-nav-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === view);
+    });
+    // Marcar activo en el menú lateral
+    document.querySelectorAll('#mobile-side-menu .nav-btn[data-view]').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === view);
+    });
+    // Disparar el botón original del nav de escritorio
+    const originalMap = {
+      panel: 'dashboard',
+      calendario: 'calendario',
+      registros: 'registros',
+      empleados: 'empleados',
+      turnos: 'turnos',
+      configuracion: 'configuracion'
+    };
+    const originalView = originalMap[view] || view;
+    const originalBtn = document.querySelector(`.main-nav .nav-btn[data-view="${originalView}"]`);
+    if (originalBtn) originalBtn.click();
+  };
+  
+  // Bottom nav
+  document.querySelectorAll('.mobile-bottom-nav-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      sincronizar(b.dataset.view);
+    });
+  });
+  
+  // Side menu
+  document.querySelectorAll('#mobile-side-menu .nav-btn[data-view]').forEach(b => {
+    b.addEventListener('click', () => {
+      sincronizar(b.dataset.view);
+      cerrarMenu();
+    });
+  });
+  
+  // Botones admin móviles (redirigen a los originales)
+  const btnAdminMob = document.getElementById('btn-mobile-admin-login');
+  const btnLogoutMob = document.getElementById('btn-mobile-logout');
+  const btnAdminOrig = document.getElementById('btn-admin-login');
+  const btnLogoutOrig = document.getElementById('btn-logout');
+  
+  if (btnAdminMob && btnAdminOrig) {
+    btnAdminMob.addEventListener('click', () => { btnAdminOrig.click(); cerrarMenu(); });
+  }
+  if (btnLogoutMob && btnLogoutOrig) {
+    btnLogoutMob.addEventListener('click', () => { btnLogoutOrig.click(); cerrarMenu(); });
+  }
+  
+  // Sincronizar visibilidad de admin
+  const observer = new MutationObserver(() => {
+    const esAdmin = btnLogoutOrig && btnLogoutOrig.style.display !== 'none';
+    if (btnAdminMob) btnAdminMob.style.display = esAdmin ? 'none' : 'flex';
+    if (btnLogoutMob) btnLogoutMob.style.display = esAdmin ? 'flex' : 'none';
+    document.querySelectorAll('#mobile-side-menu .admin-only').forEach(el => {
+      el.style.display = esAdmin ? 'flex' : 'none';
+    });
+  });
+  if (btnLogoutOrig) {
+    observer.observe(btnLogoutOrig, { attributes: true, attributeFilter: ['style'] });
+  }
+  
+  aplicarVisibilidad();
+  window.addEventListener('resize', aplicarVisibilidad);
+});
+
+
+// --- VISIBILIDAD DE BOTONES EN MENÚ MÓVIL ---
+const actualizarVisibilidadMenuMovil = () => {
+  const hayTrabajador = sessionStorage.getItem('rlpt_active_user') !== null;
+  const esAdmin = document.getElementById('btn-logout') && document.getElementById('btn-logout').style.display !== 'none';
+  
+  const btnCalendarioMob = document.getElementById('btn-mobile-calendario');
+  const btnRegistrosMob = document.getElementById('btn-mobile-registros');
+  const btnEmpleadosMob = document.getElementById('btn-mobile-empleados');
+  const btnTurnosMob = document.getElementById('btn-mobile-turnos');
+  const btnConfigMob = document.getElementById('btn-mobile-configuracion');
+  
+  if (esAdmin) {
+    if (btnCalendarioMob) btnCalendarioMob.style.display = 'flex';
+    if (btnRegistrosMob) btnRegistrosMob.style.display = 'flex';
+    if (btnEmpleadosMob) btnEmpleadosMob.style.display = 'flex';
+    if (btnTurnosMob) btnTurnosMob.style.display = 'flex';
+    if (btnConfigMob) btnConfigMob.style.display = 'flex';
+  } else if (hayTrabajador) {
+    if (btnCalendarioMob) btnCalendarioMob.style.display = 'flex';
+    if (btnRegistrosMob) btnRegistrosMob.style.display = 'flex';
+    if (btnEmpleadosMob) btnEmpleadosMob.style.display = 'none';
+    if (btnTurnosMob) btnTurnosMob.style.display = 'none';
+    if (btnConfigMob) btnConfigMob.style.display = 'none';
+  } else {
+    if (btnCalendarioMob) btnCalendarioMob.style.display = 'none';
+    if (btnRegistrosMob) btnRegistrosMob.style.display = 'none';
+    if (btnEmpleadosMob) btnEmpleadosMob.style.display = 'none';
+    if (btnTurnosMob) btnTurnosMob.style.display = 'none';
+    if (btnConfigMob) btnConfigMob.style.display = 'none';
+  }
+  
+  const bnCalendario = document.getElementById('bn-calendario');
+  const bnRegistros = document.getElementById('bn-registros');
+  if (bnCalendario) bnCalendario.style.display = hayTrabajador || esAdmin ? 'flex' : 'none';
+  if (bnRegistros) bnRegistros.style.display = hayTrabajador || esAdmin ? 'flex' : 'none';
+};
+
+window.addEventListener('load', actualizarVisibilidadMenuMovil);
+window.addEventListener('sesion-cambiada', actualizarVisibilidadMenuMovil);
+setInterval(actualizarVisibilidadMenuMovil, 1000);
+
+const menuBtn = document.getElementById('mobile-menu-btn');
+if (menuBtn) {
+  menuBtn.addEventListener('click', () => {
+    setTimeout(actualizarVisibilidadMenuMovil, 50);
+  });
+}

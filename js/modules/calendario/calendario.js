@@ -17,7 +17,9 @@ const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 export const renderCalendario = () => {
   const cont = $('#calendario-content');
   const empleados = DB.empleados.all();
-  const idForzado = window.empLogueadoId || '';
+  // Seguridad: leer la sesión de sessionStorage para saber si es trabajador
+  const sessionTrabajador = sessionStorage.getItem('rlpt_active_user');
+  const idForzado = window.empLogueadoId || sessionTrabajador || '';
   const esAdmin = !idForzado;
 
   cont.innerHTML = `
@@ -35,13 +37,15 @@ export const renderCalendario = () => {
         <button class="btn ghost" id="btn-exportar-pdf" style="padding:2px 10px; font-size:0.8rem;">Exportar mes</button>
       </div>
       
-      <div style="margin-bottom: 10px; display: ${esAdmin ? 'flex' : 'none'}; align-items: center; gap: 10px;">
+      ${esAdmin ? `
+      <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
         <label style="margin:0; font-size: 0.85rem;">Empleado:</label>
         <select id="sel-empleado-cal" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; min-width: 200px;">
           <option value="">-- Todo el equipo (General) --</option>
           ${empleados.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('')}
         </select>
       </div>
+      ` : ''}
 
       <div id="resumen-mensual" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px;">
