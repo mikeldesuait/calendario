@@ -21,3 +21,192 @@ table { width: 100%; border-collapse: collapse; background: var(--card); border-
 th { background: var(--primary); color: #fff; padding: 12px; text-align: left; font-size: .85rem; } td { padding: 12px; border-bottom: 1px solid var(--border); }
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: #fff; padding: 14px 22px; border-radius: 8px; opacity: 0; transform: translateY(20px); transition: .3s; pointer-events: none; z-index: 1000; }
 .toast.show { opacity: 1; transform: none; } .toast.error { background: var(--danger); } .toast.success { background: var(--success); }
+
+
+/* ============================================ */
+/* RESPONSIVE - MÓVIL Y TABLET                  */
+/* ============================================ */
+
+/* Tablets (hasta 1024px) */
+@media (max-width: 1024px) {
+  #app { padding: 16px; }
+  .app-header { padding: 14px 18px; }
+  .brand h1 { font-size: 1.2rem; }
+  .main-nav { gap: 6px; }
+  .nav-btn { padding: 8px 12px; font-size: 0.8rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+/* Móviles (hasta 768px) */
+@media (max-width: 768px) {
+  /* Header apilado */
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 10px;
+  }
+  .brand h1 { font-size: 1.1rem; text-align: center; }
+  .brand .subtitle { text-align: center; font-size: 0.7rem; }
+  
+  .main-nav {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .main-nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+  
+  #app { padding: 10px; }
+  h2 { font-size: 1.2rem; margin-bottom: 12px; }
+  
+  /* Tarjetas */
+  .card { padding: 14px; border-radius: 8px; }
+  
+  /* Grid de tarjetas a 1 columna */
+  .grid { grid-template-columns: 1fr; }
+  
+  /* Formularios a 1 columna */
+  .field[style*="grid-template-columns"],
+  div[style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr 2fr auto"],
+  div[style*="grid-template-columns: 1fr 1fr 2fr auto"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Tablas: scroll horizontal */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  th, td { padding: 8px; font-size: 0.8rem; }
+  
+  /* Botones más grandes para dedos */
+  button.btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+  
+  /* Toasts ocupan el ancho */
+  .toast {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+  
+  /* Modal */
+  .card[style*="position:fixed"],
+  .card[style*="width: 450px"],
+  .card[style*="width: 420px"],
+  .card[style*="width: 380px"],
+  .card[style*="width: 400px"],
+  .card[style*="width: 500px"],
+  .card[style*="width: 750px"],
+  .card[style*="width: 900px"] {
+    width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+    margin: 10px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Calendario: celdas más pequeñas y legibles */
+  #calendario-grid {
+    gap: 2px !important;
+  }
+  #calendario-grid > div {
+    min-height: 45px !important;
+    padding: 2px !important;
+    font-size: 0.6rem !important;
+  }
+  #calendario-grid > div > div:first-child {
+    font-size: 0.65rem !important;
+  }
+  
+  /* Leyenda del calendario */
+  div[style*="gap:12px; margin-bottom:8px"] {
+    gap: 8px !important;
+    font-size: 0.65rem !important;
+  }
+  
+  /* Resumen del calendario a 2 columnas */
+  div[style*="repeat(auto-fit, minmax(110px, 1fr))"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Modal detalle día */
+  #modal-detalle-dia .card {
+    width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+  }
+  
+  /* Login y modales admin */
+  #modal-admin-login .card,
+  #modal-fichaje-publico .card,
+  #modal-confirm-extra .card,
+  #modal-auto-backup .card {
+    width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+    padding: 20px !important;
+  }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  .brand h1 { font-size: 1rem; }
+  .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
+  
+  #app { padding: 8px; }
+  
+  /* Fuentes más pequeñas */
+  body { font-size: 14px; }
+  h2 { font-size: 1.1rem; }
+  h3 { font-size: 0.95rem; }
+  
+  /* Resumen del calendario a 1 columna en móvil muy pequeño */
+  div[style*="repeat(auto-fit, minmax(110px, 1fr))"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Calendar aún más compacto */
+  #calendario-grid > div {
+    min-height: 38px !important;
+    font-size: 0.55rem !important;
+  }
+  
+  /* Botones del panel de fichaje */
+  #zona-fichaje button {
+    font-size: 0.9rem !important;
+    padding: 10px 20px !important;
+  }
+  
+  /* Reloj más pequeño */
+  #reloj-grande {
+    font-size: 2rem !important;
+  }
+}
+
+/* Landscape en móvil */
+@media (max-width: 900px) and (orientation: landscape) {
+  .app-header {
+    flex-direction: row;
+    padding: 8px 12px;
+  }
+  .brand h1 { font-size: 1rem; }
+  .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
+}
