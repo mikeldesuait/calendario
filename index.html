@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RLPT.es · Registro Horario</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="main-app">
+    <header class="app-header">
+      <div class="brand">
+        <h1>RLPT.es <span>Registro Horario</span></h1>
+        <p class="subtitle">Conforme al Real Decreto-ley 8/2019</p>
+      </div>
+      
+      <!-- BOTÓN DE ADMINISTRACIÓN (Solo visible si no eres admin) -->
+      <nav class="main-nav">
+        <button class="nav-btn active" id="btn-panel-nav" data-view="dashboard">Panel</button>
+        <button class="nav-btn" data-view="calendario">Calendario</button>
+        <button class="nav-btn" data-view="registros">Registros</button>
+        
+        <!-- Pestañas protegidas -->
+        <button class="nav-btn admin-only" data-view="empleados" style="display:none;">Empleados</button>
+        <button class="nav-btn admin-only" data-view="turnos" style="display:none;">Turnos</button>
+        <button class="nav-btn admin-only" data-view="configuracion" style="display:none;">Configuración</button>
+      </nav>
+
+      <div style="display:flex; align-items:center; gap:10px; margin-left:20px;">
+        <button class="nav-btn accent" id="btn-admin-login">🔑 Acceso Admin</button>
+        <button class="nav-btn danger" id="btn-logout" style="display:none;">Salir Admin</button>
+      </div>
+    </header>
+
+    <main id="app">
+      <section id="view-dashboard" class="view active"><h2>Panel de control</h2><div id="dashboard-content"></div></section>
+      <section id="view-empleados" class="view"><h2>Empleados</h2><div id="empleados-content"></div></section>
+      <section id="view-turnos" class="view"><h2>Configuración de Turnos</h2><div id="turnos-content"></div></section>
+      <section id="view-registros" class="view"><h2>Registros</h2><div id="registros-content"></div></section>
+      <section id="view-calendario" class="view"><h2>Calendario</h2><div id="calendario-content"></div></section>
+      <section id="view-configuracion" class="view"><h2>Configuración</h2><div id="configuracion-content"></div></section>
+      
+      
+    </main>
+  </div>
+
+  <!-- MODAL DE LOGIN DE ADMINISTRADOR -->
+  <div id="modal-admin-login" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index:2000; align-items:center; justify-content:center;">
+    <div class="card" style="width: 350px; padding: 30px; text-align: center;">
+      <h2 style="color: var(--primary); margin-bottom: 20px;">Acceso Administrador</h2>
+      <div class="field" style="text-align: left; margin-bottom: 10px;">
+        <label>Usuario de Admin</label>
+        <input id="admin-user-input" type="text" placeholder="admin" style="padding: 10px; width: 100%; box-sizing: border-box;">
+      </div>
+      <div class="field" style="text-align: left;">
+        <label>Contraseña de Admin</label>
+        <input id="admin-pass-input" type="password" placeholder="••••••••" style="padding: 10px; width: 100%; box-sizing: border-box;">
+      </div>
+      <button class="btn accent" id="btn-do-admin-login" style="width: 100%; padding: 10px; margin-top: 15px;">Entrar</button>
+      <button class="btn ghost" id="btn-close-admin-login" style="width: 100%; padding: 10px; margin-top: 10px;">Cancelar</button>
+      <a href="#" id="btn-recuperar-pin" style="display: block; margin-top: 15px; font-size: 0.85rem; color: #f59e0b; text-decoration: none;">🔑 ¿Olvidaste la contraseña? Entrar con PIN</a>
+      <p id="admin-login-error" style="color: var(--danger); margin-top: 10px; font-size: 0.85rem; display: none;">Contraseña incorrecta</p>
+    </div>
+  </div>
+
+  
+  <!-- MODAL DE FICHAJE PÚBLICO -->
+  <div id="modal-fichaje-publico" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index:2000; align-items:center; justify-content:center;">
+    <div class="card" style="width: 350px; padding: 30px; text-align: center;">
+      <h2 style="color: var(--primary); margin-bottom: 20px;">Fichar Jornada</h2>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 15px;">Introduce tu ID de empleado y contraseña.</p>
+      <div class="field" style="text-align: left;">
+        <label>ID Empleado</label>
+        <input id="fichaje-user-input" type="text" placeholder="EMP-001" style="padding: 10px; width: 100%; box-sizing: border-box;">
+      </div>
+      <div class="field" style="text-align: left; margin-top: 10px;">
+        <label>Contraseña</label>
+        <input id="fichaje-pass-input" type="password" placeholder="••••••••" style="padding: 10px; width: 100%; box-sizing: border-box;">
+      </div>
+      <button class="btn accent" id="btn-do-fichaje-login" style="width: 100%; padding: 10px; margin-top: 15px;">Identificarse</button>
+      <button class="btn ghost" id="btn-close-fichaje" style="width: 100%; padding: 10px; margin-top: 10px;">Cancelar</button>
+      <p id="fichaje-login-error" style="color: var(--danger); margin-top: 10px; font-size: 0.85rem; display: none;">Credenciales incorrectas</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

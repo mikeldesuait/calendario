@@ -1,0 +1,15 @@
+# Backups (contienen datos)
+backup/
+*.zip
+*.json
+
+# Scripts de Python temporales
+*.py
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Configuración del editor
+.vscode/
+.idea/
